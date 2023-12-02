@@ -1,6 +1,7 @@
 from datetime import date
 
 class classConfig:
+    """ini class config"""
     merk_mobil = open("merk.txt")
     merk = merk_mobil.readlines()
     
