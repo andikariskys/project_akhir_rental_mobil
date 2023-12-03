@@ -13,7 +13,26 @@ class classConfig:
     
     indeks = 0
     
+    def get_daftar_mobil(self):
+        print()
+        print('   Daftar Harga Sewa Mobil Automatic/Manual Harian')
+        print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
+        print(f"| {'No' :<3} | {'Merk Mobil' :<10} | {'Jumlah Kursi' :<18} | {'Harga Sewa' :<11} |")
+        print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
+        
+        while self.indeks < len(self.merk):
+            m_merk = str.replace(self.merk[self.indeks], '\n', '')
+            m_jml_kursi = int(self.jml_kursi[self.indeks])
+            m_hrg_sewa = str(int(self.hrg_sewa[self.indeks])) + '.000'
+            
+            print(f"| {self.indeks+1 :<3} | {m_merk :<10} | {m_jml_kursi} / {m_jml_kursi + 1} {'Tanpa sopir' :<12} | Rp {m_hrg_sewa :<8} |")
+            
+            self.indeks +=1
+    
     def get_data_penyewaan(self):
+        nama_lengkap_penyewa = input("Masukkan nama penyewa \n => ")
+        alamat_lengkap_peyewa = input("Masukkan alamat lengkap penyewa \n => ")
+        
         ulangi_pilih_mobil = True
         while ulangi_pilih_mobil:
             pilih_mobil = int(input("Pilihan mobil Anda? (1/2/3/...) \n => "))
@@ -63,22 +82,25 @@ class classConfig:
                 ulangi_tanggal_kembali = False
         
         berkas_penyewaan = input("Apakah berkas penyewaan sudah lengkap? Cth. KTP/NPWP/SIM/... (Ya/Y atau Tidak/T) \n => ")
-    
-    def get_daftar_mobil(self):
-        print()
-        print('   Daftar Harga Sewa Mobil Automatic/Manual Harian')
-        print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
-        print(f"| {'No' :<3} | {'Merk Mobil' :<10} | {'Jumlah Kursi' :<18} | {'Harga Sewa' :<11} |")
-        print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
         
-        while self.indeks < len(self.merk):
-            m_merk = str.replace(self.merk[self.indeks], '\n', '')
-            m_jml_kursi = int(self.jml_kursi[self.indeks])
-            m_hrg_sewa = str(int(self.hrg_sewa[self.indeks])) + '.000'
+        if berkas_penyewaan == 'Ya' or berkas_penyewaan == 'Y':
+            harga_sewa = self.hrg_sewa[pilih_mobil]
+            tgl_bln_tahun_ambil = date(date.today().year, bulan_ambil, tanggal_ambil)
+            tgl_bln_tahun_kembali = date(date.today().year, bulan_kembali, tanggal_kembali)
+            total_penyewaan = tgl_bln_tahun_kembali - tgl_bln_tahun_ambil
+            total_biaya_sewa = total_penyewaan.days * harga_sewa
             
-            print(f"| {self.indeks+1 :<3} | {m_merk :<10} | {m_jml_kursi} / {m_jml_kursi + 1} {'Tanpa sopir' :<12} | Rp {m_hrg_sewa :<8} |")
+            # cetak/print dibawah:
+            # data/berkas penyewa
+            # nama penyewa
+            # alamat
+            # merk mobil (jumlah kursi)
+            # tarif sewa per-hari
+            # tgl bln thn pinjam & kembali (jumlah hari penyewaan)
+            # total biaya sewa
             
-            self.indeks +=1
+        else:
+            print("Lengkapi berkas terlebih dahulu jika ingin menyewa mobil")
     
     merk_mobil.close()
     jml_kursi_mobil.close()
