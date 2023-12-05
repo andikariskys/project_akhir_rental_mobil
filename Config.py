@@ -1,4 +1,5 @@
 from datetime import date
+import os
 
 class classConfig:
     """ini class config"""
@@ -14,6 +15,7 @@ class classConfig:
     indeks = 0
     
     def get_daftar_mobil(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
         print()
         print('   Daftar Harga Sewa Mobil Automatic/Manual Harian')
         print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
@@ -80,32 +82,36 @@ class classConfig:
                 print("Tanggal pengembalian minimal besok (1 hari)")
             else:
                 ulangi_tanggal_kembali = False
+                
+        ulangi_sopir = True
+        while ulangi_sopir:
+            sopir = input("Apakah anda ingin menggunakan sopir pribadi (sewa perhari + Rp 75.000)? (Y/T) \n => ")
+            if sopir == 'Y' or sopir == 'T':
+                ulangi_sopir = False
+            else: 
+                print("Jawab menggunakan Y untuk Ya dan T untuk Tidak")
         
-        berkas_penyewaan = input("Apakah berkas penyewaan sudah lengkap? Cth. KTP/NPWP/SIM/... (Ya/Y atau Tidak/T) \n => ")
+        os.system('cls' if os.name == 'nt' else 'clear')
         
-        if berkas_penyewaan == 'Ya' or berkas_penyewaan == 'Y':
-            harga_sewa = self.hrg_sewa[pilih_mobil]
-            tgl_bln_tahun_ambil = date(date.today().year, bulan_ambil, tanggal_ambil)
-            tgl_bln_tahun_kembali = date(date.today().year, bulan_kembali, tanggal_kembali)
-            total_penyewaan = tgl_bln_tahun_kembali - tgl_bln_tahun_ambil
+        merk_mobil_sewa = str.replace(self.merk[pilih_mobil], '\n', '')
+        harga_sewa = int(self.hrg_sewa[pilih_mobil])
+        tgl_bln_tahun_ambil = date(date.today().year, bulan_ambil, tanggal_ambil)
+        tgl_bln_tahun_kembali = date(date.today().year, bulan_kembali, tanggal_kembali)
+        total_penyewaan = tgl_bln_tahun_kembali - tgl_bln_tahun_ambil
+        if sopir == 'Y':
+            total_biaya_sewa = total_penyewaan.days * (harga_sewa + 75)
+            jumlah_kursi = int(self.jml_kursi[pilih_mobil])
+        else: 
             total_biaya_sewa = total_penyewaan.days * harga_sewa
-            
-            # cetak/print dibawah:
-            # data/berkas penyewa
-            # nama penyewa
-            # alamat
-            # merk mobil (jumlah kursi)
-            # tarif sewa per-hari
-            # tgl bln thn pinjam & kembali (jumlah hari penyewaan)
-            # total biaya sewa
-            
-        else:
-            print("Lengkapi berkas terlebih dahulu jika ingin menyewa mobil")
+            jumlah_kursi = int(self.jml_kursi[pilih_mobil]) + 1
+        
+        print(f"{'Nama lengkap penyewa' :<40} : {nama_lengkap_penyewa}")
+        print(f"{'Alamat lengkap penyewa' :<40} : {alamat_lengkap_peyewa}")
+        print(f"{'Merk mobil (jumlah tempat duduk)' :<40} : {merk_mobil_sewa} ({jumlah_kursi} seat)" )
+        print(f"{'Tarif sewa harian' :<40} : {harga_sewa}")
+        print(f"{'Tanggal ambil & kembali (durasi sewa)' :<40} : {tgl_bln_tahun_ambil} - {tgl_bln_tahun_kembali} ({total_penyewaan.days} hari)")
+        print(f"{'Total biaya sewa' :<40} : Rp {total_biaya_sewa}.000")
     
     merk_mobil.close()
     jml_kursi_mobil.close()
     hrg_sewa_mobil.close()
-
-cfg = classConfig()
-cfg.get_daftar_mobil()
-cfg.get_data_penyewaan()
