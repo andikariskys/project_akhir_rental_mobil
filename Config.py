@@ -38,7 +38,7 @@ class classConfig:
         ulangi_pilih_mobil = True
         while ulangi_pilih_mobil:
             pilih_mobil = int(input("Pilihan mobil Anda? (1/2/3/...) \n => ")) - 1
-            if pilih_mobil < 1 or pilih_mobil > self.indeks :
+            if pilih_mobil < 0 or pilih_mobil > self.indeks :
                 print("Pilih nomor kendaraan yang tepat")
             else:
                 ulangi_pilih_mobil = False
