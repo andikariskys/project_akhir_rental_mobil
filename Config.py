@@ -43,74 +43,54 @@ class classConfig:
             else:
                 ulangi_pilih_mobil = False
         
-        ulangi_bulan_ambil = True
-        while ulangi_bulan_ambil:
-            bulan_ambil = int(input("Masukkan bulan ambil mobil (1 - 12) \n => "))
-            if len(str(bulan_ambil)) > 2 or bulan_ambil > 12 or bulan_ambil < 1:
-                print("Bulan harus diantara 1 - 12")
-            elif bulan_ambil < date.today().month:
-                print("Bulan pengambilan minimal bulan ini")
-            else:
-                ulangi_bulan_ambil = False
-        
         ulangi_tanggal_ambil = True
         while ulangi_tanggal_ambil:
-            tanggal_ambil = int(input("Masukkan tanggal ambil mobil (1 - 31) \n => "))
-            if len(str(tanggal_ambil)) > 2 or tanggal_ambil > 31 or tanggal_ambil < 1:
-                print("Tanggal harus diantara 1 - 31")
-            elif tanggal_ambil < date.today().day:
-                print("Tanggal pengambilan minimal hari ini")
+            tgl_ambil = input("Masukkan tanggal ambil (format: yyyy-mm-dd) \n => ")
+            if len(tgl_ambil) != 10 or tgl_ambil[2] == '-':
+                print("Format yang Anda masukkan salah")
+            elif int(tgl_ambil[0:4]) < date.today().year or int(tgl_ambil[5:7]) < date.today().month or int(tgl_ambil[8:10]) < date.today().day:
+                print(f"Tanggal pengambilan mobil minimal hari ini ({date.today().year} - {date.today().month} - {date.today().day})")
             else:
                 ulangi_tanggal_ambil = False
-        
-        ulangi_bulan_kembali = True
-        while ulangi_bulan_kembali:
-            bulan_kembali = int(input("Masukkan bulan kembali mobil (1 - 12) \n => "))
-            if len(str(bulan_kembali)) > 2 or bulan_kembali > 12 or bulan_kembali < 1:
-                print("Bulan harus diantara 1 - 12")
-            elif bulan_kembali < bulan_ambil:
-                print("Bulan pengembalian minimal bulan ini")
-            else:
-                ulangi_bulan_kembali = False
+                tgl_pinjam = date(int(tgl_ambil[0:4]) , int(tgl_ambil[5:7]) , int(tgl_ambil[8:10]))
         
         ulangi_tanggal_kembali = True
         while ulangi_tanggal_kembali:
-            tanggal_kembali = int(input("Masukkan tanggal kembali mobil (1 - 31) \n => "))
-            if len(str(tanggal_kembali)) > 2 or tanggal_kembali > 31 or tanggal_kembali < 1:
-                print("Tanggal harus diantara 1 - 31")
-            elif tanggal_kembali <= tanggal_ambil:
-                print("Tanggal pengembalian minimal besok (1 hari)")
+            tgl_kembali = input("Masukkan tanggal kembali (format: yyyy-mm-dd) \n => ")
+            if len(tgl_kembali) != 10 or tgl_kembali[2] == '-':
+                print("Format yang Anda masukkan salah")
+            elif int(tgl_kembali[0:4]) < tgl_pinjam.year or int(tgl_kembali[5:7]) < tgl_pinjam.month or int(tgl_kembali[8:10]) <= tgl_pinjam.day:
+                print(f"Tanggal pengambilan mobil minimal sehari setelah pengambilan ({tgl_pinjam.year} - {tgl_pinjam.month} - {tgl_pinjam.day + 1})")
             else:
                 ulangi_tanggal_kembali = False
-                
+                tgl_pengembalian = date(int(tgl_kembali[0:4]) , int(tgl_kembali[5:7]) , int(tgl_kembali[8:10]))
+        
+        lama_sewa = tgl_pengembalian - tgl_pinjam
+        merk_mobil_sewa = str.replace(self.merk[pilih_mobil], '\n', '')
+        harga_sewa = int(self.hrg_sewa[pilih_mobil])
+        
         ulangi_sopir = True
         while ulangi_sopir:
             sopir = input("Apakah anda ingin menggunakan sopir pribadi (sewa perhari + Rp 75.000)? (Y/T) \n => ")
             if sopir == 'Y' or sopir == 'T':
                 ulangi_sopir = False
+                if sopir == 'Y':
+                    total_biaya_sewa = lama_sewa.days * (harga_sewa + 75)
+                    jumlah_kursi = int(self.jml_kursi[pilih_mobil])
+                else:
+                    total_biaya_sewa = lama_sewa.days * harga_sewa
+                    jumlah_kursi = int(self.jml_kursi[pilih_mobil]) + 1
             else: 
                 print("Jawab menggunakan Y untuk Ya dan T untuk Tidak")
         
         os.system('cls' if os.name == 'nt' else 'clear')
         
-        merk_mobil_sewa = str.replace(self.merk[pilih_mobil], '\n', '')
-        harga_sewa = int(self.hrg_sewa[pilih_mobil])
-        tgl_bln_tahun_ambil = date(date.today().year, bulan_ambil, tanggal_ambil)
-        tgl_bln_tahun_kembali = date(date.today().year, bulan_kembali, tanggal_kembali)
-        total_penyewaan = tgl_bln_tahun_kembali - tgl_bln_tahun_ambil
-        if sopir == 'Y':
-            total_biaya_sewa = total_penyewaan.days * (harga_sewa + 75)
-            jumlah_kursi = int(self.jml_kursi[pilih_mobil])
-        else: 
-            total_biaya_sewa = total_penyewaan.days * harga_sewa
-            jumlah_kursi = int(self.jml_kursi[pilih_mobil]) + 1
-        
         print(f"{'Nama lengkap penyewa' :<40} : {nama_lengkap_penyewa}")
         print(f"{'Alamat lengkap penyewa' :<40} : {alamat_lengkap_peyewa}")
         print(f"{'Merk mobil (jumlah tempat duduk)' :<40} : {merk_mobil_sewa} ({jumlah_kursi} seat)" )
-        print(f"{'Tarif sewa harian' :<40} : {harga_sewa}")
-        print(f"{'Tanggal ambil & kembali (durasi sewa)' :<40} : {tgl_bln_tahun_ambil} - {tgl_bln_tahun_kembali} ({total_penyewaan.days} hari)")
-        print(f"{'Total biaya sewa' :<40} : Rp {total_biaya_sewa}.000")
+        print(f"{'Tarif sewa harian' :<40} : {harga_sewa}000")
+        print(f"{'Tanggal ambil & kembali (durasi sewa)' :<40} : {tgl_pinjam} - {tgl_kembali} ({lama_sewa.days} hari)")
+        print(f"{'Total biaya sewa' :<40} : Rp {total_biaya_sewa}000")
     
     merk_mobil.close()
     jml_kursi_mobil.close()
