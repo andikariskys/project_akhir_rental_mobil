@@ -15,6 +15,7 @@ class classConfig:
     indeks = 0
     
     def get_daftar_mobil(self):
+        """ini digunakan untuk mencetak daftar harga sewa dengan detail merk, jumlah kursi, dan informasi sopir"""
         os.system('cls' if os.name == 'nt' else 'clear')
         print()
         print('   Daftar Harga Sewa Mobil Automatic/Manual Harian')
@@ -32,6 +33,7 @@ class classConfig:
             self.indeks +=1
     
     def get_data_penyewaan(self):
+        """ini digunakan untuk mengumpulkan informasi penyewa mobil dari pengguna, termasuk nama penyewa, alamat, pilihan mobil, tanggal ambil, dan tanggal kembali"""
         nama_lengkap_penyewa = input("Masukkan nama penyewa \n => ")
         alamat_lengkap_peyewa = input("Masukkan alamat lengkap penyewa \n => ")
         
