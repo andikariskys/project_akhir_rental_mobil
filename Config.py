@@ -36,7 +36,8 @@ class classConfig:
         """ini digunakan untuk mengumpulkan informasi penyewa mobil dari pengguna, termasuk nama penyewa, alamat, pilihan mobil, tanggal ambil, dan tanggal kembali"""
         nama_lengkap_penyewa = input("Masukkan nama penyewa \n => ")
         alamat_lengkap_peyewa = input("Masukkan alamat lengkap penyewa \n => ")
-        
+
+        """digunakan untuk memilih mobil"""
         ulangi_pilih_mobil = True
         while ulangi_pilih_mobil:
             pilih_mobil = int(input("Pilihan mobil Anda? (1/2/3/...) \n => ")) - 1
@@ -66,7 +67,8 @@ class classConfig:
             else:
                 ulangi_tanggal_kembali = False
                 tgl_pengembalian = date(int(tgl_kembali[0:4]) , int(tgl_kembali[5:7]) , int(tgl_kembali[8:10]))
-        
+                
+        """untuk perhitungan"""
         lama_sewa = tgl_pengembalian - tgl_pinjam
         merk_mobil_sewa = str.replace(self.merk[pilih_mobil], '\n', '')
         harga_sewa = int(self.hrg_sewa[pilih_mobil])
