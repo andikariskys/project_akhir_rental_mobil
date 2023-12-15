@@ -6,6 +6,7 @@ class ClassMain():
     print("Selamat Datang di Rental Mobil Algopro")
     print()
     print("Silakan login terlebih dahulu")
+    print(type(config))
     ulangi_login = True
     while ulangi_login:
         username = input("Masukkan username anda (tekan CRTL + C untuk keluar) \n => ")
