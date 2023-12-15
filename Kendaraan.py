@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime, date
 import os
 
 class Kendaraan:
@@ -18,9 +18,9 @@ class Kendaraan:
         if self.__jenis == 'Mobil':
             print()
             print('   Daftar Harga Sewa Mobil Automatic/Manual Harian')
-            print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
-            print(f"| {'No' :<3} | {'Merk Mobil' :<10} | {'Jumlah Kursi' :<18} | {'Harga Sewa' :<11} |")
-            print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
+            print(f"| {'-'*3} | {'-'*10} | {'-'*10} | {'-'*11} |")
+            print(f"| {'No' :<3} | {'Merk Mobil' :<10} | {'Jml Kursi' :<10} | {'Harga Sewa' :<11} |")
+            print(f"| {'-'*3} | {'-'*10} | {'-'*10} | {'-'*11} |")
             
             indeks_mobil = 0
             no = 1
@@ -29,11 +29,67 @@ class Kendaraan:
                 mob_jml_kursi = int(self.__data_kendaraan[indeks_mobil +1])
                 mob_hrg_sewa = int(self.__data_kendaraan[indeks_mobil +2]) * 1000
                 
-                print(f"| {no :<3} | {mob_merk :<10} | {mob_jml_kursi} / {mob_jml_kursi + 1} {'Tanpa sopir' :<12} | Rp {mob_hrg_sewa :<8} |")
+                print(f"| {no :<3} | {mob_merk :<10} | {mob_jml_kursi :<10} | Rp {mob_hrg_sewa :<8} |")
             
-                print(f"| {'-'*3} | {'-'*10} | {'-'*18} | {'-'*11} |")
+                print(f"| {'-'*3} | {'-'*10} | {'-'*10} | {'-'*11} |")
                 indeks_mobil += 3
                 no += 1
+        else:
+            print()
+            print('   Daftar Harga Sewa Motor Automatic/Manual Harian')
+            print(f"| {'-'*3} | {'-'*21} | {'-'*15} | {'-'*11} |")
+            print(f"| {'No' :<3} | {'Merk Motor' :<21} | {'Transmisi' :<15} | {'Harga Sewa' :<11} |")
+            print(f"| {'-'*3} | {'-'*21} | {'-'*15} | {'-'*11} |")
+            
+            indeks_motor = 0
+            no = 1
+            while indeks_motor < len(self.__data_kendaraan):
+                mot_merk = str.replace(self.__data_kendaraan[indeks_motor], '\n', '')
+                mot_transmisi = str.replace(self.__data_kendaraan[indeks_motor +1], '\n', '')
+                mot_hrg_sewa = int(self.__data_kendaraan[indeks_motor +2]) * 1000
+                
+                print(f"| {no :<3} | {mot_merk :<21} | {mot_transmisi :<15} | Rp {mot_hrg_sewa :<8} |")
+            
+                print(f"| {'-'*3} | {'-'*21} | {'-'*15} | {'-'*11} |")
+                indeks_motor += 3
+                no += 1
+    
+    def sewa_kendaraan(self):
+        nama_lengkap_penyewa = input("Masukkan nama penyewa \n => ")
+        alamat_lengkap_peyewa = input("Masukkan alamat lengkap penyewa \n => ")
+        
+        while True:
+            pilih_mobil = int(input("Pilihan mobil Anda? (1/2/3/...) \n => ")) - 1
+            if pilih_mobil < 0 or pilih_mobil > self.indeks :
+                print("Pilih nomor kendaraan yang tepat")
+            else:
+                break
+        
+        while True:
+            try:
+                input_tgl = input("Masukkan tanggal pengambilan mobil (format: yyyy-mm-dd) \n => ")
+                tgl_ambil = datetime.strptime(input_tgl, "%Y-%m-%d").date()
+                if tgl_ambil < date.today():
+                    print("Tanggal ambil kendaraan minimal hari ini")
+                else:
+                    break
+            except:
+                print("Format yang anda masukkan salah")
+        
+        while True:
+            try:
+                input_tgl = input("Masukkan tanggal pengambilan mobil (format: yyyy-mm-dd) \n => ")
+                tgl_kembali = datetime.strptime(input_tgl, "%Y-%m-%d").date()
+                if tgl_kembali <= tgl_ambil:
+                    print("Tanggal pengembalian kendaraan minimal sehari setelah pengambilan")
+                else:
+                    break
+            except:
+                print("Format yang anda masukkan salah")
+        
+        lama_sewa = (tgl_kembali - tgl_ambil).days
+        merk_kendaraan = str.replace(self.__data_kendaraan[pilih_mobil], '\n', '')
+        harga_sewa = int(self.__data_kendaraan[pilih_mobil])
 
 ken = Kendaraan('Mobil.txt', 'Mobil')
 ken.tampilkan_kendaraan()
