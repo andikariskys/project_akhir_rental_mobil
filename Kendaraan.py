@@ -59,10 +59,11 @@ class Kendaraan:
         alamat_lengkap_peyewa = input("Masukkan alamat lengkap penyewa \n => ")
         
         while True:
-            pilih_mobil = int(input("Pilihan mobil Anda? (1/2/3/...) \n => ")) - 1
-            if pilih_mobil < 0 or pilih_mobil > self.indeks :
+            pilih_kendaraan = int(input("Pilihan mobil Anda? (1/2/3/...) \n => ")) - 1
+            if pilih_kendaraan < 0 or pilih_kendaraan > len(self.__data_kendaraan) / 3 :
                 print("Pilih nomor kendaraan yang tepat")
             else:
+                pilih_kendaraan = pilih_kendaraan * 3
                 break
         
         while True:
@@ -88,8 +89,36 @@ class Kendaraan:
                 print("Format yang anda masukkan salah")
         
         lama_sewa = (tgl_kembali - tgl_ambil).days
-        merk_kendaraan = str.replace(self.__data_kendaraan[pilih_mobil], '\n', '')
-        harga_sewa = int(self.__data_kendaraan[pilih_mobil])
+        merk_kendaraan = str.replace(self.__data_kendaraan[pilih_kendaraan], '\n', '')
+        if self.__jenis == 'Mobil':
+            jumlah_kursi = int(self.__data_kendaraan[pilih_kendaraan + 1])
+        else:
+            transmisi = str.replace(self.__data_kendaraan[pilih_kendaraan + 1], '\n', '')
+        harga_sewa = int(self.__data_kendaraan[pilih_kendaraan + 2]) *1000
+        total_biaya_sewa = harga_sewa * lama_sewa
+        
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f"{'Nama lengkap penyewa' :<40} : {nama_lengkap_penyewa}")
+        print(f"{'Alamat lengkap penyewa' :<40} : {alamat_lengkap_peyewa}")
+        if self.__jenis == 'Mobil':
+            print(f"{'Merk mobil (Jumlah tempat duduk)' :<40} : {merk_kendaraan} ({jumlah_kursi} kursi)" )
+        else:
+            print(f"{'Merk Motor (Transmisi)' :<40} : {merk_kendaraan} (Transmisi {transmisi})")
+        print(f"{'Tarif sewa harian' :<40} : {harga_sewa}")
+        print(f"{'Tanggal ambil & kembali (durasi sewa)' :<40} : {tgl_ambil} - {tgl_kembali} ({lama_sewa} hari)")
+        print(f"{'Total biaya sewa' :<40} : Rp {total_biaya_sewa}")
 
-ken = Kendaraan('Mobil.txt', 'Mobil')
-ken.tampilkan_kendaraan()
+# jalankan program 
+while True:
+    username = input("Masukkan username anda \n => ")
+    password = input("Masukkan password anda \n => ")
+    
+    if username == "Admin" and password == "Admin":
+        # jika ingin menyewa motor, maka ubah 'Mobil.txt' menjadi 'Motor.txt' dan 'Mobil' menjadi 'Motor'
+        ken = Kendaraan('Mobil.txt', 'Mobil')
+        ken.tampilkan_kendaraan()
+        ken.sewa_kendaraan()
+        break
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("Username dan atau password yang anda masukkan salah ")
