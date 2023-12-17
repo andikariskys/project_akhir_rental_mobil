@@ -79,7 +79,7 @@ class Kendaraan:
         
         while True:
             try:
-                input_tgl = input("Masukkan tanggal pengambilan mobil (format: yyyy-mm-dd) \n => ")
+                input_tgl = input("Masukkan tanggal pengembalian mobil (format: yyyy-mm-dd) \n => ")
                 tgl_kembali = datetime.strptime(input_tgl, "%Y-%m-%d").date()
                 if tgl_kembali <= tgl_ambil:
                     print("Tanggal pengembalian kendaraan minimal sehari setelah pengambilan")
